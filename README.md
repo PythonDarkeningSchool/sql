@@ -1,5 +1,33 @@
 # SQL
 
+## Setup
+
+### Create a new instance
+
+In command prompt type the following command
+
+```bash
+sqllocaldb create "<instanceName>"
+sqllocaldb start "<instanceName>"
+```
+
+### Open the instance into Microsoft SQL Server Management Studio 2017
+
+Once you open `Microsft SQL Server Management Studio 2017` the following window will appear
+
+![open_a_instance](img/open_a_instance.JPG)
+
+The important fields are:
+
+- Server name: `LocalDb`\\<instanceName>
+- Windows Authentication
+
+### Create a new database
+
+In the `Object Explorer` (right side), right click to see the `New Database` option
+
+## ![create_new_database](img/create_new_database.JPG)
+
 ## Definition
 
 SQL stands for `Structured Query Language` is a special-purpose programming language
@@ -9,6 +37,36 @@ SQL stands for `Structured Query Language` is a special-purpose programming lang
 - To manipulate sets of data
 - Typically from a relational database
 - ANSI and ISO standards
+
+## Tables
+
+### Create a new table
+
+Click on the `New Query` button and then insert the following
+
+```sql
+create table Users(
+	email varchar(50)
+);
+```
+
+> Where
+>
+> - create table => means literally to create a new table
+> - Users = > the table's name
+>   - email => the column name
+>     - varchar => that the content of the row will be of type character
+>       - 50 = the row's length
+
+Once you type the code, click on execute button, then right click over `Tables` folder to refresh the tables due to `SQL Server Management Studio` does not refresh automatically
+
+To see the table created go to next path
+
+`Databases` => *<*dataBaseName*>* => Tables 
+
+![database_create_columns](img/database_create_columns.JPG)
+
+### Delete a table
 
 # Database
 
@@ -90,4 +148,3 @@ DELETE FROM contacts WHERE id = 2;
 ```
 
 Where `contacts` is the table to consult
-
