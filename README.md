@@ -38,7 +38,7 @@ SQL stands for `Structured Query Language` is a special-purpose programming lang
 - Typically from a relational database
 - ANSI and ISO standards
 
-## Tables
+## Working with Tables
 
 ### Create a new table
 
@@ -225,6 +225,21 @@ create table Users(
 > default 0 => means that if the user does not specify any value for this cell the default value will be 0
 >
 > default getdate() => means that if the user does not specify any date the default value will be the current date
+
+ # Working with Data
+
+## Inserting Data
+
+```sql
+insert into Users(Email, CreateAt, First, Last, Bio)
+values("test@test.com", getdate(), "Test", "User", "Some person");
+```
+
+> Where:
+>
+> Insert into <tableName>(<columnName1>,<columnName1>)
+>
+> values => must be follow the order from above
 
 # Database
 
