@@ -24,9 +24,19 @@ The important fields are:
 
 ### Create a new database
 
+#### Graphical Way
+
 In the `Object Explorer` (right side), right click to see the `New Database` option
 
 ## ![create_new_database](img/create_new_database.JPG)
+
+#### Command line way
+
+```sql
+CREATE DATABASE <databaseName>;
+```
+
+
 
 ## Definition
 
@@ -88,15 +98,15 @@ Same as above, refresh in order to update the content
 
 ```sql
 create table Users(
-	Id Integer primary key
+	Id INTEGER PRIMARY KEY
 );
 ```
 
 > Where
 >
 > - Id => is the name of the column
->   - Integer => is the type of data that will be in each row
->   - primary key => specifies explicitly that it would be a `primary key`
+>   - INTEGER=> is the type of data that will be in each row
+>   - PRIMARY KEY => specifies explicitly that it would be a `PRIMARY KEY`
 
 output:
 
@@ -120,20 +130,20 @@ The use of this is to increase the `Id` column into 1 when a new data would be i
 
 ```sql
 create table Users(
-	Id integer primary key identity(1,1),
+	Id INTEGER PRIMARY KEY IDENTITY(1,1),
     email varchar(50)
 );
 ```
 
 > where:
 >
-> - identity -> the first `1` means that it will start from that number, the second `1` it means that the increment would be of `1`
+> - IDENTITY => the first `1` means that it will start from that number, the second `1` it means that the increment would be of `1`
 
 ### Incrementing GUID Primary Keys
 
 ```sql
 create table Users(
-	Id uniqueidentifier primary key default newid(),
+	Id UNIQYEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
     email varchar(50)
 );
 ```
@@ -142,7 +152,7 @@ create table Users(
 
 >  where:
 >
-> - default newid() => it's a built-in function that will return a new GUID like `75sdsad1-245dsadsa ...`
+> - DEFAULT NEWID() => it's a built-in function that will return a new GUID like `75sdsad1-245dsadsa ...`
 
 ### Tangent: Choosing a key
 
@@ -162,49 +172,49 @@ The following structure is know as `many to many relationships`
 
 ```sql
 create table Users(
-	Id integer primary key identity(1,1),
-    email varchar(50) not null
+	Id INTEGER PRIMARY KEY IDENTITY(1,1),
+    email VARCHAR(50) NOT NULL
 );
 create table Users_Roles(
 	UserId integer,
     RoleId integer,
-    primary key(UserId, RoleId)
+    PRIMARY KEY(UserId, RoleId)
 );
 create table Roles(
-	Id integer primary key identity(1,1),
-    Name varchar(50)
+	Id INTEGER PRIMARY KEY IDENTITY(1,1),
+    Name VARCHAR(50)
 );
 ```
 
 > Where:
 >
-> primary key(UserId, RoleId) => is to avoid duplicates in the table `Users_Roles`
+> PRIMARY KEY(UserId, RoleId) => is to avoid duplicates in the table `Users_Roles`
 
 ## Defining columns
 
 ```sql
 create table Users(
-	Id integer primary key identity(1,1) not null,
-    Email varchar(25) not null unique,
-    MoneySpent decimal(10,2),
-    CreateAt datetime not null,
-    First varchar(25),
-    Last varchar(25),
-    Bio varchar(max)
+	Id INTEGER PRIMARY KEY IDENTITY(1,1) NOT NULL,
+    Email VARCHAR(25)  NOT NULL UNIQUE,
+    MoneySpent DECIMAL(10,2),
+    CreateAt DATETIME NOT NULL,
+    First VARCHAR(25),
+    Last VARCHAR(25),
+    Bio VARCHAR(max)
 );
 ```
 
 > Where:
 >
-> not null => means that this fields is required and cannot be empty
+> NOT NULL => means that this fields is required and cannot be empty
 >
-> unique => means that this value cannot be repeated in the table
+> UNIQUE=> means that this value cannot be repeated in the table
 >
-> decimal(10,2) => means that it will accept a maximum of 10 as length with 2 decimals (this will rounded any decimal)
+> DECIMAL(10,2) => means that it will accept a maximum of 10 as length with 2 decimals (this will rounded any decimal)
 >
-> CreateAt datetime => You must specified a timestamp `00:00:00 00:00:00.000`
+> DATETIME=> You must specified a timestamp `00:00:00 00:00:00.000`
 >
-> Bio varchar(max)=> it will accept the maximum allowed length for characters in this cell
+> VARCHAR(max)=> it will accept the maximum allowed length for characters in this cell
 
 ## Columns defaults
 
@@ -359,8 +369,6 @@ WHERE Id <= 10;
 DELETE from Users;
 ```
 
-
-
 # Querying Data
 
 ## Simple Select
@@ -426,6 +434,174 @@ Notice that `columnName` is surrounded by *braces* and this is because the colum
 SELECT [column Name]
 from <tableName>;
 ```
+
+
+
+#  Joining Tables
+
+## Inner Joins
+
+To explain more in detail this topic perform the following steps
+
+1 - Create a new database
+
+```sql
+CREATE DATABASE production;
+```
+
+2 - Create a new table for `production database`
+
+```sql
+USE [production]
+GO
+create table products(
+	product_id INTEGER PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	product_name VARCHAR(50) NOT NULL,
+	brand_id VARCHAR(50) NOT NULL,
+	category_id INTEGER NOT NULL,
+	model_year INTEGER NOT NULL,
+	list_price DECIMAL(10, 2) NOT NULL
+);
+GO
+```
+
+*NOTE*: Please `Refresh` the Databases into `Microsoft SQL Server Management Studio` to continue
+
+3 - Add some information to `products` table
+
+```sql
+USE [production]
+GO
+
+INSERT INTO [dbo].[products]
+	(product_name, brand_id, category_id, model_year, list_price)
+VALUES
+	('Mazda 3', 'Mazda', 1, 2019, 407005.87),
+	('Mazda 2', 'Mazda', 2, 2019, 197000.85);
+GO
+
+
+```
+
+Note: with the above code we avoid to get errors when insert data to the table due to `Microsoft SQL Server Management Studio` does not refresh the cache automatically, but if this does not works please `refresh` the Databases manually
+
+4 - Create a new table for `categories`
+
+```sql
+USE [production]
+GO
+create table categories(
+	category_id INTEGER PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	category_name VARCHAR(50) NOT NULL
+);
+USE [production]
+GO
+```
+
+5 - Add some information to `categories` table
+
+```sql
+USE [production]
+GO
+
+INSERT INTO [dbo].[categories]
+	(category_name)
+VALUES
+	('Hasback'),
+	('Compact');
+GO
+
+```
+
+At this point the tables would looks like this
+
+`for products table`
+
+![products_table](img/products_table.JPG)
+
+`for categories table`
+
+![categories_table](img/categories_table.JPG)
+
+Suppose that from `products table` you need to know what kind of car is the Mazda 3, basically the logic is like this
+
+The column `category_id` in the table `products` is linked directly to the column called in the same way in `categories` table, know this we can perform a query where we have the following 3 fields (for instance)
+
+- product_name (coming from `products` table)
+- category_name (coming from `categories table)
+- list_price (coming from `products` table)
+
+The code for this is:
+
+```sql
+USE production
+GO
+	SELECT
+		product_name, category_name, list_price
+	FROM products p
+	INNER JOIN categories c ON c.category_id = p.category_id;
+go
+```
+
+> Where:
+>
+> USE => is a keyword to indicate explicitly which database we want to use
+>
+> GO => the code inside here will be executed in the database previously mentioned
+>
+> SELECT => we can select the `columnsName` from both tables in the order we want
+>
+> FROM => specified a table and the word `p` is an aliases (to not write to much ;))
+>
+> INNER JOIN => the query to be perfumed 
+
+In this query, the `INNER JOIN` clause matches rows from both `products` and `categories` tables. If a row in the `products` table has the same value in the `category_id` column as a row in the `categories` table, the query combines the values of columns specified in the `SELECT` list into a new row and includes that new row in the result set.
+
+*In few words,`INNER JOIN` works like an `if statement`, if this is true, this will create a table with the elements specified in `SELECT` keyword*
+
+Reference: [SQL Server Inner Join](http://www.sqlservertutorial.net/sql-server-basics/sql-server-inner-join)
+
+## Subqueries
+
+```sql
+USE Chinook
+GO
+	SELECT *,
+	(
+		SELECT COUNT(1) 
+			FROM Album 
+			WHERE Album.ArtistId = Artist.ArtistId
+	) as AlbumCount
+	FROM Artist
+ORDER BY AlbumCount;
+go
+```
+
+> Where:
+>
+> - The parenthesis => is the subquery to perform
+>   - SELECT COUNT(1) => counter to increment in 1 when the condition is meet
+>   - FROM => The table to compare
+>   - WHERE => the condition to meet
+>   - as AlbumCount => the name of the new column to be created
+> - ORDER BY => order the table by an specific column
+
+## Left and Right Joins
+
+`INNER JOIN` will not shows element that does not meet with the specific condition, for that reason *LEFT* and *RIGHT* are useful here
+
+```sql
+USE Chinook
+GO
+	SELECT Name, Title
+	FROM Artist
+	LEFT JOIN Album on Album.ArtistId = Artist.ArtistId
+GO
+```
+
+This code means that if the condition does not meet it has to appears in the output table as a `NULL` in the right side.
+
+With the *`RIGHT`* keyword happen the same situation, the data as `NULL` will appears in the left side (if any)
 
 
 
