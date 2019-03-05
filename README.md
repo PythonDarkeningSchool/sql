@@ -231,15 +231,203 @@ create table Users(
 ## Inserting Data
 
 ```sql
-insert into Users(Email, CreateAt, First, Last, Bio)
-values("test@test.com", getdate(), "Test", "User", "Some person");
+INSERT INTO Users(Email, CreateAt, First, Last, Bio)
+VALUES('test@test.com', getdate(), 'Test', 'User', 'Some person');
 ```
 
 > Where:
 >
-> Insert into <tableName>(<columnName1>,<columnName1>)
+> INSERT INTO <tableName>(<columnName1>,<columnName1>)
 >
-> values => must be follow the order from above
+> VALUES => must be follow the order from above
+
+Note: `SQL-Server` is not case sensitive, and it uses *single quotes* for `varchar`
+
+To consult the data create type the following command:
+
+```sql
+SELECT * FROM Users;
+```
+
+Output:
+
+![select_from_users_output](img/select_from_users_output.JPG)
+
+
+
+## Bulk Inserts
+
+To Demonstrate how to perform a `bulk insert` in a database we will use `Chinook Database`
+
+### Chinook Database
+
+Chinook is a sample database available for SQL Server, Oracle, MySQL, etc. It can be created by running a single SQL script. 
+
+#### Setup
+
+Step 1 - Download the following files for `SQL-Server` from [DataSources](https://github.com/lerocha/chinook-database/tree/master/ChinookDatabase/DataSources)
+
+:link: [Chinook_SqlServer.sql](https://raw.githubusercontent.com/lerocha/chinook-database/master/ChinookDatabase/DataSources/Chinook_SqlServer.sql)
+
+:link: [Chinook_SqlServer_AutoIncrementPKs.sql](https://raw.githubusercontent.com/lerocha/chinook-database/master/ChinookDatabase/DataSources/Chinook_SqlServer_AutoIncrementPKs.sql)
+
+Step 2 - Open them in `Microsoft SQL Server Management Studio` and execute them with `F5`
+
+Output:
+
+![chinook_database_example](img/chinook_database_example.JPG)
+
+### Inserting the data
+
+We have to use `dbo.Customer` table from `Chinook` to insert some columns into `dbo.Users` table
+
+```sql
+INSERT INTO Users(Email, First, Last)
+SELECT Email, FirstName, LastName
+FROM Chinook.dbo.Customer
+```
+
+Considerations
+
+In the case that some column in the database differ in length, e.g:
+
+| Column Name | Data Type   | VS   | Column Name | Data Type  |
+| ----------- | ----------- | ---- | ----------- | ---------- |
+| Email       | nvachar(40) |      | Email       | vachar(30) |
+
+There is a problem because you cannot insert the data from the table `A` to table `B` since the length is different, in this case you have to perform the following steps in `Microsoft SQL Server Management Studio`
+
+>  Tools > Options > Designers > Table and Database Designers > `uncheck` => "Prevent saving changes that require table re-creation"
+
+Now, right click under the table with less length and select `Design`, then increase the `Data Type` correspondent.
+
+Close the `Design` window and save the changes performed
+
+
+
+Generally speaking, `Microsoft SQL Management Studio` will properly handle dependencies when you modify a table in a way that requires it to be recreated (it will do assorted tricks with temp tables behind the scenes, which you can see if you tell it to generate a change script instead of actually making the changes). However, this may involve modifications/changes to related tables or foreign keys. In other words, don't do this on a live system if you can help it, and make sure you've got backups before you do it.
+
+## Updating Data
+
+### Single record
+
+Structure
+
+```sql
+UPDATE <tableName> SET
+<columnName> = '09/23/2014'
+WHERE <columnName> = <someId>;
+```
+
+e.g:
+
+```sql
+UPDATE Users SET
+CreateAt = '09/23/2014'
+WHERE Id=1;
+```
+
+### Bulk Updates
+
+```sql
+UPDATE Users SET
+CreateAt = '09/23/2012'
+WHERE Id <= 10;
+```
+
+## Deleting Data
+
+### Single record
+
+```sql
+DELETE from Users
+WHERE Id=1;
+```
+
+### Bulk Delete
+
+#### With Criteria
+
+```sql
+DELETE from Users
+WHERE Id <= 10;
+```
+
+#### All table
+
+```sql
+DELETE from Users;
+```
+
+
+
+# Querying Data
+
+## Simple Select
+
+```sql
+SELECT *
+from <tableName>
+```
+
+> Where:
+>
+> \* => this wildcard means that will select everything from the table
+
+## Select Columns
+
+```sql
+SELECT <columnName>,<columnName>
+-- SELECT *
+from <tableName>
+```
+
+> Where:
+>
+> `-- ` => is the way to put comments in `SQL Server`
+
+## Aliasing Columns
+
+```sql
+SELECT <columnName> as 'someName', <columnName> as 'someOtherName'
+from <tableName>
+```
+
+With the above command the original columns name will be overwriting with the alias assigned
+
+## Column Expressions
+
+```sql
+SELECT <columnName> + ' ' + <otherColumnName> as 'customColumnName'
+from <tableName>
+```
+
+The above code will `concatenate` two columns in one with a custom column name, if we omitted the alias  we will have `No column name` because the concatenation of two columns will be the value instead of the column name
+
+## Spaces into Columns Names
+
+### Create a column with spaces
+
+To add a column name with a space the code is the following:
+
+```sql
+ALTER TABLE <tableName> ADD [<columnName>] VARCHAR(50) NULL
+```
+
+> Where:
+>
+> - `VARCHAR(50)` and `NULL` as parameters and could be replaced by others parameters
+
+Notice that `columnName` is surrounded by *braces* and this is because the column name will have spaces
+
+### Consult a column with spaces
+
+```sql
+SELECT [column Name]
+from <tableName>;
+```
+
+
 
 # Database
 
