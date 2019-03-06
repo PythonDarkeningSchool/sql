@@ -116,7 +116,7 @@ output:
 
 ```sql
 create table Users(
-	Id uniqueidentifier primary key
+	Id UNIQUEIDNETIFIER PRIMARY KEY
 );
 ```
 
@@ -604,6 +604,38 @@ This code means that if the condition does not meet it has to appears in the out
 With the *`RIGHT`* keyword happen the same situation, the data as `NULL` will appears in the left side (if any)
 
 
+
+# Linking Tables
+
+## FOREIGN KEY
+
+A `FOREIGN KEY` is a key used to link two tables together.
+
+A `FOREIGN KEY` is a field (or collection of fields) in one table that refers to the `PRIMARY KEY` in another table.
+
+The table containing the foreign key is called the child table, and the table containing the candidate key is called the referenced or parent table.
+
+```sql
+CONSTRAINT [FK_ProductBrief_SeriesID_Series_SeriesID] FOREIGN KEY (SeriesID) REFERENCES ProductBriefSeries(SeriesID)
+```
+
+> Where:
+>
+> - `CONSTRAINT` => is the constraint for the column
+> - `FK_ProductBrief_SeriesID_Series_SeriesID` => is the name of the `CONSTRAINT` where:
+>   - FK => Foreign Key
+>   - ProductBrief => The current table
+>   - SeriesID => A column in the current table
+>   - Series => A table in the database
+>   - SeriesID => A column part of the `Series` table
+> - `FOREIGN KEY` (SeriesID) => where `SeriesID` is a reference for a column in the current table
+> - `REFERENCES` ProductBriefSeries(SeriesID): Where `ProductBriefSeries` is a table in the database and `SeriesID` is a column from that table
+
+Basically the concept is that to the column you assigned as `Foreign Key` can not has another value than the reference table.column in the database, if you try to insert a different value you will have an error
+
+References:
+
+- :link: [SQL - Server Foreign Key](https://www.w3schools.com/sql/sql_foreignkey.asp)
 
 # Database
 
