@@ -603,7 +603,249 @@ This code means that if the condition does not meet it has to appears in the out
 
 With the *`RIGHT`* keyword happen the same situation, the data as `NULL` will appears in the left side (if any)
 
+## Full Joins
 
+```sql
+USE Chinook
+GO
+	SELECT Name, Title
+	FROM Artist FULL JOIN Album
+	ON Album.ArtistId = Artist.ArtistId
+GO
+```
+
+It has the same effect that `Left` and `Right` `JOINs`
+
+# Filtering, Sifting, and Sorting Data
+
+## Ordering Results
+
+```sql
+USE Chinook
+GO
+SELECT FirstNAme + ' ' + LastName as Name, Email, Country, InvoiceId, InvoiceDate, Total
+FROM Customer c
+INNER JOIN Invoice i on i.CustomerId = c.CustomerId
+WHERE Country = 'Brazil'
+ORDER BY Total DESC;
+GO
+
+```
+
+> Where:
+>
+> - WHERE => is to filter results
+> - ORDER BY => the results will be ordered from the column `Total`
+>   - DESC => the results will be ordered in `descending way`
+
+
+
+## Limiting Results
+
+```sql
+USE Chinook
+GO
+SELECT TOP 10 FirstNAme + ' ' + LastName as Name, Email, Country, InvoiceId, InvoiceDate, Total
+FROM Customer c
+INNER JOIN Invoice i on i.CustomerId = c.CustomerId
+WHERE Country = 'Brazil'
+ORDER BY Total DESC;
+GO
+```
+
+The main difference between this example and the previous one is the use of the keyword `SELECT TOP 10` where it is indicated that the query will only shows the first 10 results
+
+## Sequential Ordering
+
+```
+USE Chinook
+GO
+SELECT TOP 10 FirstNAme + ' ' + LastName as Name, Email, Country, InvoiceId, InvoiceDate, Total
+FROM Customer c
+INNER JOIN Invoice i on i.CustomerId = c.CustomerId
+WHERE Country = 'USA'
+OR Country = 'Canada'
+ORDER BY Country DESC, LastName DESC;
+GO
+```
+
+Practically it is the same command that the previous one, only `extends` the functionality of `WHERE` keyword
+
+Some comments here:
+
+- `OR` keyword has the functionality of `AND` keyword in other languages
+- Even though `LastName` it is not specified in `SELECT` statement, we can use it
+
+## Filtering by Sets
+
+```sql
+USE Chinook
+GO
+SELECT TOP 10 FirstNAme + ' ' + LastName as Name, Email, Country, InvoiceId, InvoiceDate, Total
+FROM Customer c
+INNER JOIN Invoice i on i.CustomerId = c.CustomerId
+WHERE Country IN ('USA', 'Canada')
+AND Total > 5
+ORDER BY Country DESC, LastName DESC;
+GO
+```
+
+This code is more readable than the `sequential order` specific in the `WHERE` keyword.
+
+A new keyword was introduced and it is `AND` that reduces the query even more to get more specific details.
+
+References:
+
+:link: [Difference between TOP and OFFSET/FEACH](https://www.essentialsql.com/what-is-the-differenence-between-top-and-offset-fetch)
+
+## Offsetting Results
+
+You have to use `ORDER BY` clause together with `OFFSET` & `FETCH NEXT` the reason is because they are part of the clause
+
+### OFFSET
+
+```sql
+USE Chinook
+GO
+	SELECT *
+	FROM Artist
+	ORDER BY Name
+	OFFSET 1 ROW
+GO
+```
+
+>  Where:
+>
+> - `OFFSET 1 ROW` => literally is to drop one column from the results
+
+### FETCH NEXT
+
+```sql
+USE Chinook
+GO
+	SELECT *
+	FROM Artist
+	ORDER BY Name
+	OFFSET 0 ROW
+	FETCH NEXT 10 ROWS ONLY
+GO
+```
+
+This code is similar to use `TOP` clause because it will show only 10 results
+
+`FETCH NEXT` has to be used together with `OFFSET`
+
+With `OFFSET 0` not rows are skipped
+
+# Aggregates and Analysis
+
+## Basic Aggregates
+
+```sql
+USE Chinook
+SELECT
+GO
+	SUM(Total) as AllTimeSales
+	AVG(Total) as AvgSale,
+	COUNT(Total) as SalesCount,
+	MIN(Total) as SmallestSale,
+	MAX(Total) as BiggestSale
+GO
+FROM Invoice;
+```
+
+> Where:
+>
+> - Total => is the column
+> - as => the alias for that column 
+> - `SUM` => it is an aggregate (like a function) to get the *sum* of the column
+> - AVG => to get the Average
+> - COUNT => to get the total elements in the column
+> - MIN => to get the min element in the column
+> - MAX => to get the max element in the column
+
+## Grouping Results
+
+```sql
+USE Chinook
+GO
+	SELECT BillingCountry,
+	SUM(Total) as AllTimeSales
+	FROM Invoice
+	GROUP BY BillingCountry
+GO
+```
+
+This is useful to show only the desired column together with a specific filter
+
+In this case the column `BillingCountry` will shows first with the `aggregate` *SUM* to the right, *all columns into `SELECT` clause must be in `GROUP BY` clause*
+
+## Having Clause
+
+The HAVING clause was added to SQL because the WHERE keyword could not be used with aggregate function
+
+```sql
+USE Chinook
+GO
+    SELECT Country,
+        COUNT(CustomerID) as Count
+    FROM Customers
+    GROUP BY Country
+    HAVING COUNT(CustomerID) = 5;
+GO
+```
+
+![having_clause](img/having_clause.JPG)
+
+Reference:
+
+:link: [Having Clause](https://www.w3schools.com/sql/sql_having.asp)
+
+# Many to Many and Self-referencing Relationships
+
+## Querying a Self-referencing Table with a Subquery
+
+This method is some confusing because the `sintax` it is not clear at all
+
+```sql
+USE Chinook
+GO
+	SELECT FirstName, LastName
+		-- Subquery
+		(SELECT FirstName + ' ' + LastName
+         	FROM Employee bosses
+         	WHERE Employee.ReportsTo = bosses.EmployeId
+    	) AS boss
+	FROM Employee;
+GO
+```
+
+> Where from the *Subquery*:
+>
+> - `SELECT` FirstName + ' ' + LastName => will be the value of the cell
+> - `FROM` Employee bosses => "Employee" is the tabla and ''bosses' is the alias
+> - `WHERE` => condition to meet
+> - `AS` boss => column name to show
+
+The result will be
+
+![self_referencing](img/self_referencing.JPG)
+
+## Querying a Self-referencing Table Using a Join
+
+```sql
+USE Chinook
+GO
+	SELECT workers.FirstName, workers.LastName
+	FROM Employee workers;
+	LEFT JOIN Employee as bosses
+	ON workers.ReportsTo = bosses=EmployeeId
+GO
+```
+
+We will got the same result as querying with a sub-query but now the code its clearer
+
+We have to use use `LEFT JOIN` to show `NULL` results
 
 # Linking Tables
 
@@ -616,7 +858,7 @@ A `FOREIGN KEY` is a field (or collection of fields) in one table that refers to
 The table containing the foreign key is called the child table, and the table containing the candidate key is called the referenced or parent table.
 
 ```sql
-CONSTRAINT [FK_ProductBrief_SeriesID_Series_SeriesID] FOREIGN KEY (SeriesID) REFERENCES ProductBriefSeries(SeriesID)
+CONSTRAINT [FK_ProductBrief_SeriesID_Series_SeriesID] FOREIGN KEY (SeriesID) REFERENCES ProductBriefSeries(SeriesID) ON DELETE CASCADE
 ```
 
 > Where:
@@ -630,6 +872,7 @@ CONSTRAINT [FK_ProductBrief_SeriesID_Series_SeriesID] FOREIGN KEY (SeriesID) REF
 >   - SeriesID => A column part of the `Series` table
 > - `FOREIGN KEY` (SeriesID) => where `SeriesID` is a reference for a column in the current table
 > - `REFERENCES` ProductBriefSeries(SeriesID): Where `ProductBriefSeries` is a table in the database and `SeriesID` is a column from that table
+> - `ON DELETE CASCADE` => this mean that if the reference record is deleted, this too
 
 Basically the concept is that to the column you assigned as `Foreign Key` can not has another value than the reference table.column in the database, if you try to insert a different value you will have an error
 
