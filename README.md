@@ -55,8 +55,8 @@ SQL stands for `Structured Query Language` is a special-purpose programming lang
 Click on the `New Query` button and then insert the following
 
 ```sql
-create table Users(
-	email varchar(50)
+CREATE TABLE Users(
+	email VARCHAR(50)
 );
 ```
 
@@ -81,7 +81,7 @@ To see the table created go to next path
 To drop a table type the following content into a `New Query`
 
 ```sql
-drop table Users;
+DROP TABLE Users;
 ```
 
 > Where
@@ -97,7 +97,7 @@ Same as above, refresh in order to update the content
 `Primary key` gives an unique id in the table, e.g:
 
 ```sql
-create table Users(
+CREATE TABLE Users(
 	Id INTEGER PRIMARY KEY
 );
 ```
@@ -115,7 +115,7 @@ output:
 ### GUID Primary Keys
 
 ```sql
-create table Users(
+CREATE TABLE Users(
 	Id UNIQUEIDNETIFIER PRIMARY KEY
 );
 ```
@@ -129,7 +129,7 @@ output
 The use of this is to increase the `Id` column into 1 when a new data would be inserted in the table
 
 ```sql
-create table Users(
+CREATE TABLE Users(
 	Id INTEGER PRIMARY KEY IDENTITY(1,1),
     email varchar(50)
 );
@@ -142,9 +142,9 @@ create table Users(
 ### Incrementing GUID Primary Keys
 
 ```sql
-create table Users(
+CREATE TABLE Users(
 	Id UNIQYEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
-    email varchar(50)
+    email VARCHAR(50)
 );
 ```
 
@@ -171,16 +171,16 @@ The better options for big database is the GUID
 The following structure is know as `many to many relationships`
 
 ```sql
-create table Users(
+CREATE TABLE Users(
 	Id INTEGER PRIMARY KEY IDENTITY(1,1),
     email VARCHAR(50) NOT NULL
 );
-create table Users_Roles(
+CREATE TABLE Users_Roles(
 	UserId integer,
     RoleId integer,
     PRIMARY KEY(UserId, RoleId)
 );
-create table Roles(
+CREATE TABLE Roles(
 	Id INTEGER PRIMARY KEY IDENTITY(1,1),
     Name VARCHAR(50)
 );
@@ -193,7 +193,7 @@ create table Roles(
 ## Defining columns
 
 ```sql
-create table Users(
+CREATE TABLE Users(
 	Id INTEGER PRIMARY KEY IDENTITY(1,1) NOT NULL,
     Email VARCHAR(25)  NOT NULL UNIQUE,
     MoneySpent DECIMAL(10,2),
@@ -219,14 +219,14 @@ create table Users(
 ## Columns defaults
 
 ```sql
-create table Users(
-	Id integer primary key identity(1,1) not null,
-    Email varchar(25) not null unique,
+CREATE TABLE Users(
+	Id INTEGER primary key identity(1,1) NOT NULL,
+    Email VARCHAR(25) NOT NULL unique,
     MoneySpent decimal(10,2) default 0,
-    CreateAt datetime not null default getdate(),
-    First varchar(25),
-    Last varchar(25),
-    Bio varchar(max)
+    CreateAt DATETIME NOT NULL default getdate(),
+    First VARCHAR(25),
+    Last VARCHAR(25),
+    Bio VARCHAR(max)
 );
 ```
 
