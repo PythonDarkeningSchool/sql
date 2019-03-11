@@ -1,6 +1,28 @@
 # SQL
 
+## Instalation
+
+Follow this [steps](https://www.sqlshack.com/step-by-step-installation-of-sql-server-2017) to install SQL Server Developer Edition  
+
 ## Setup
+
+## Enable TCP/IP connections
+
+1 - Enable TCP/IP
+
+### ![tcp_ip_1](img/tcp_ip_1.JPG)
+
+2 - Specify the port `1433`
+
+### ![tcp_ip_2](img/tcp_ip_2.JPG)
+
+3 - Restart the service
+
+![restart_service](img/restart_service.JPG)
+
+References
+
+:link:[Cannot connect to to SQL](https://dba.stackexchange.com/questions/62165/i-cant-connect-to-my-servers-sql-database-via-an-ip-address)
 
 ### Create a new instance
 
