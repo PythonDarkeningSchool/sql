@@ -825,6 +825,88 @@ Reference:
 
 # Many to Many and Self-referencing Relationships
 
+When normalizing a database or adding tables to an exiting database, we need to be able to relate tables to each other.
+
+There are three ways in which a table can be related to another table:
+
+1. *One-to-one*: A record in one table is related to one record in another table
+2. *One-to-many*: A record in one table is related to many records in another table
+3. *Many-to-many*: Multiple records in one table are related to multiples records in another table
+
+Handling a `one-to-one` relationship or `one-to-many` relationship can be done by adding the primary key of one table into the other table as a foreign key.
+
+However, for `many-to-many` relationships, it's a bit different.
+
+e.g, create the following tables and contents:
+
+```sql
+USE [bom]
+GO
+	CREATE TABLE Student(
+		StudentID INTEGER PRIMARY KEY IDENTITY(1,1) NOT NULL,
+		StudentName VARCHAR(50) NOT NULL
+	);
+GO
+
+USE [bom]
+GO
+	CREATE TABLE Class(
+		ClassID INTEGER PRIMARY KEY IDENTITY(1,1) NOT NULL,
+		ClassName VARCHAR(50) NOT NULL
+	);
+GO
+
+USE [bom]
+GO
+	INSERT INTO Class(ClassName)
+	VALUES('English'), ('Maths'), ('Spanish'), ('Biology'), ('Science'), ('Programming'), ('Law'), ('Commerce'), ('Physical Education');
+
+GO
+
+USE [bom]
+GO
+	INSERT INTO Student(StudentName)
+	VALUES('John'), ('Debbie'), ('Matwee'), ('Paul'), ('Gregory'), ('Luis');
+
+GO
+```
+
+You will have the following
+
+![many_to_many_1](img/many_to_many_1.JPG)
+
+Create the table `many-to-many`
+
+```sql
+USE [bom]
+GO
+	CREATE TABLE StudentClass(
+	    StudentID INTEGER NOT NULL,
+        ClassID INTEGER NOT NULL,
+        PRIMARY KEY(StudentID, ClassID)
+	);
+GO
+
+```
+
+Insert data in the `many-to-many` table
+
+```sql
+USE [bom]
+GO
+	INSERT INTO StudentClass(StudentID, ClassID)
+	VALUES(1, 1);
+GO
+```
+
+The above code will produce the following table where it says that the student `1` can has several class as he want
+
+![many_to_many_2](img/many_to_many_2.JPG)
+
+References:
+
+:link: [Many-to-many relationships](https://dzone.com/articles/how-to-handle-a-many-to-many-relationship-in-datab)​
+
 ## Querying a Self-referencing Table with a Subquery
 
 This method is some confusing because the `sintax` it is not clear at all
