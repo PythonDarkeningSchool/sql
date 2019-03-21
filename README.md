@@ -1,12 +1,12 @@
-# SQL
+# SQL Server
 
-## Instalation
+## Installation
 
 Follow this [steps](https://www.sqlshack.com/step-by-step-installation-of-sql-server-2017) to install SQL Server Developer Edition  
 
 ## Setup
 
-## Enable TCP/IP connections
+### Enable TCP/IP connections
 
 1 - Enable TCP/IP
 
@@ -70,6 +70,24 @@ SQL stands for `Structured Query Language` is a special-purpose programming lang
 - Typically from a relational database
 - ANSI and ISO standards
 
+## Index
+
+Available index types
+
+| Index Type   | Definition                                                   | Links                                                        |
+| ------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Clustered    | A clustered index sorts and stores the data rows of the table or view in order based on the clustered index key. The clustered index is implemented as a B-tree index structure that supports fast retrieval of the rows, based on their clustered index key values. | [Clustered and Nonclustered Indexes Described](https://docs.microsoft.com/en-us/sql/relational-databases/indexes/clustered-and-nonclustered-indexes-described?view=sql-server-2017) \| [Create Clustered Indexes](https://docs.microsoft.com/en-us/sql/relational-databases/indexes/create-clustered-indexes?view=sql-server-2017) \|  [Clustered Index Design Guidelines](https://docs.microsoft.com/en-us/sql/relational-databases/sql-server-index-design-guide?view=sql-server-2017#Clustered) |
+| Nonclustered | A nonclustered index can be defined on a table or view with a clustered index or on a heap. Each index row in the nonclustered index contains the nonclustered key value and a row locator. This locator points to the data row in the clustered index or heap having the key value. The rows in the index are stored in the order of the index key values, but the data rows are not guaranteed to be in any particular order unless a clustered index is created on the table. | [Clustered and Nonclustered Indexes Described](https://docs.microsoft.com/en-us/sql/relational-databases/indexes/clustered-and-nonclustered-indexes-described?view=sql-server-2017) \| [Create Nonclustered Indexes](https://docs.microsoft.com/en-us/sql/relational-databases/indexes/create-nonclustered-indexes?view=sql-server-2017) \| [Nonclustered Index Design Guidelines](https://docs.microsoft.com/en-us/sql/relational-databases/sql-server-index-design-guide?view=sql-server-2017#Nonclustered) |
+| Unique       | A unique index ensures that the index key contains no duplicate values and therefore every row in the table or view is in some way unique. | [Create Unique Indexes](https://docs.microsoft.com/en-us/sql/relational-databases/indexes/create-unique-indexes?view=sql-server-2017) \| [Unique Index Design Guidelines](https://docs.microsoft.com/en-us/sql/relational-databases/sql-server-index-design-guide?view=sql-server-2017#Unique) |
+
+:link: [More Official information here](https://docs.microsoft.com/en-us/sql/relational-databases/indexes/indexes?view=sql-server-2017)
+
+## Indexes and Constraints
+
+Indexes are automatically created when PRIMARY KEY and UNIQUE constraints are defined on table columns. For example, when you create a table with a UNIQUE constraint, Database Engine automatically creates a non-clustered index. If you configure a PRIMARY KEY, Database Engine automatically creates a clustered index, unless a clustered index already exists. When you try to enforce a PRIMARY KEY constraint on an existing table and a clustered index already exists on that table, SQL Server enforces the primary key using a nonclustered index.
+
+For more information, see [Create Primary Keys](https://docs.microsoft.com/en-us/sql/relational-databases/tables/create-primary-keys?view=sql-server-2017) and [Create Unique Constraints](https://docs.microsoft.com/en-us/sql/relational-databases/tables/create-unique-constraints?view=sql-server-2017).
+
 ## Working with Tables
 
 ### Create a new table
@@ -113,6 +131,15 @@ DROP TABLE Users;
 Same as above, refresh in order to update the content
 
 ## Primary Keys
+
+ As the name implies it is just a constraint, and with that constraint you tell SQL Server that you want to have unique values in a specific column or in a specific group of columns
+
+When you specify the Primary Key constraint, you can specify the following 2 options:
+
+- CLUSTERED
+- NONCLUSTERED
+
+The option **CLUSTERED** is the default one, and therefore you don’t have to specify it
 
 ### Integer Primary Key
 
