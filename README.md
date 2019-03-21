@@ -978,6 +978,54 @@ We will got the same result as querying with a sub-query but now the code its cl
 
 We have to use use `LEFT JOIN` to show `NULL` results
 
+# Essential String and Date Functions
+
+## Querying Strings with a Partial Results
+
+In few words `Querying strings with wildcards`
+
+```sql
+SELECT * 
+FROM <TableName>
+WHERE <ColumnName> LIKE '<someString>%'
+```
+
+> Where:
+>
+> - `LIKE` => is a keyword to indicates that will be using a partial query
+> - `%` => is the equivalent to `*` wildcard in other languages
+
+## Partial String Results with Substring
+
+In few words to show limit a field the content to show, e.g
+
+`Word`: accept
+
+`Result`: accep
+
+```sql
+SELECT <ColumnName>, SUBSTRING(ColumnName, 1 , 5)
+FROM <TableName>
+```
+
+> Where:
+>
+> `1` => Start from the initial word
+>
+> `5` => cut the word at the word 5
+
+## Editing String Results with Replace
+
+As the title says, replace a word
+
+```sql
+SELECT *, REPLACE(<ColumnName>, '<someWord>', '<wordToReplace>') as <NewColumn>
+FROM <TableName>
+WHERE <ColumnName> LIKE '%<someWord>%'
+```
+
+
+
 # Linking Tables
 
 ## FOREIGN KEY
