@@ -1026,6 +1026,63 @@ WHERE <ColumnName> LIKE '%<someWord>%'
 
 
 
+## Fixing Bad Data With Trim
+
+### LTRIM
+
+To remove left empty spaces
+
+```sql
+SELECT <ColumnName>, LTRIM(<ColumnName>) as <ColumnNameAlias>
+FROM <TableName>
+WHERE <ColumnName> LIKE '%<somePatterToSearch>%'
+```
+
+To remove empty spaces from a table
+
+```sql
+UPDATE <TableName> SET <ColumnName> = LTRIM(<ColumnName>)
+```
+
+:warning: *Careful! Updating like this will lock the records and if you table is large, you could cause your app to crash!​*
+
+### RTRIM
+
+Verify if there is not right spaces in a column
+
+```sql
+SELECT <ColumnName>, LEN(<ColumnName>)
+FROM <TableName>
+WHERE DATALENGTH<ColumnName> <> DATALENGTH(RTRIM(<ColumnName>))
+```
+
+>  The above code will print all values in the column with right empty spaces
+
+To remove right spaces from a table
+
+```sql
+UPDATE <TableName> SET <ColumnName> = RTRIM(<ColumnName>)
+```
+
+
+
+## Slicing Dates with Datepart
+
+Basically is to split the date, e.g: `2009-01-01 00:00:00:00` by quarter, month, year, day
+
+```sql
+SELECT <ColumnNameWithDate>
+DATEPART(quarter, <ColumnNameWithDate>) as quarter,
+DATEPART(month, <ColumnNameWithDate>) as month,
+DATEPART(year, <ColumnNameWithDate>) as year,
+DATEPART(day, <ColumnNameWithDate>) as day
+FROM <Table>
+```
+
+
+
+ 
+
 # Linking Tables
 
 ## FOREIGN KEY
