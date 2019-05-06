@@ -4,7 +4,7 @@
 
 Follow this [steps](https://www.sqlshack.com/step-by-step-installation-of-sql-server-2017) to install SQL Server Developer Edition  
 
-## Setup
+## Setup for windows
 
 ### Enable TCP/IP connections
 
@@ -60,9 +60,40 @@ CREATE DATABASE <databaseName>;
 
 
 
-## Definition
+## Setup for MacOS
+
+### Download Azure Data Studio
+
+Azure Data Studio runs on Windows, MacOS and Linux
+
+[Download](https://docs.microsoft.com/en-us/sql/azure-data-studio/download?view=sql-server-2017)
+
+### Create a new database locally
+
+Please follow the procedure from this [link](https://database.guide/create-sql-server-database-with-sqlops/) 
+
+### Connect to the database
+
+Follow the procedure from this [link](https://database.guide/how-to-install-sqlops-mac/)
+
+### Import a CSV
+
+Follow the procude from this [link](https://docs.microsoft.com/en-us/sql/azure-data-studio/sql-server-import-extension?view=sql-server-2017)
+
+## Definitions
 
 SQL stands for `Structured Query Language` is a special-purpose programming language
+
+| Concept                           | Definition                                                   |
+| --------------------------------- | ------------------------------------------------------------ |
+| Database                          | An organized collection of data from a simple text file to a sophisticated set of files managed by enterprise database software |
+| Relational Database               | One type of database that is organized into tables of related data with additional elements such as views, queries, and reports |
+| Relational Database Normalization | An objective of relational database design to promote data integrity and reduce data redundancy by organizing data into separate tables or columns |
+| Database-management System (DBMS) | The software that reads, writes, and maintains database files. Typical examples include Microsoft SQL Server, SQLite, MongoDB, and IBM DB2 |
+| Connection String                 | The text-based configuration for specifying which database server and database to connect to, which driver to usem and who is attempting to access the resource |
+| Production Environment            | A production environment is defined as an environment that is accessed by end-users of an application (such as an internet website) and that is used for more than gethering feedback or acceptance testing of that application |
+
+
 
 ## Purpose
 
